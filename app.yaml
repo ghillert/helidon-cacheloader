@@ -1,0 +1,37 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: helidon-cacheloader
+  labels:
+    app: helidon-cacheloader
+spec:
+  type: ClusterIP
+  selector:
+    app: helidon-cacheloader
+  ports:
+    - name: tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: helidon-cacheloader
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: helidon-cacheloader
+  template:
+    metadata:
+      labels:
+        app: helidon-cacheloader
+        version: v1
+    spec:
+      containers:
+      - name: helidon-cacheloader
+        image: helidon-cacheloader
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
